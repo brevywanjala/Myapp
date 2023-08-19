@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyYoutube</title>
+    <link rel="icon" href="{{ url_for('static', filename='youtube.ico') }}" type="image/x-icon">
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Include Bootstrap CSS (optional) -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/card.css" rel="stylesheet">
+    <style>
+ 
+        
+
+    </style>
+    <script>
+        function openCard(cardId) {
+            var card = document.getElementById(cardId);
+            var overlay = document.querySelector('.card-overlay');
+            card.style.display = 'block';
+            overlay.style.display = 'block';
+          }
+          
+          function closeCard() {
+            var cards = document.querySelectorAll('.card1');
+            var overlay = document.querySelector('.card-overlay');
+            for (var i = 0; i < cards.length; i++) {
+              cards[i].style.display = 'none';
+            }
+            overlay.style.display = 'none';
+          }
+    </script>
+    
+
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="https://www.youtube.com/" target="_blank" class="">
+                <h4><i class="fab fa-youtube text-red-500"></i><b class="text-black">My Youtube </b></h4>
+            </a>
+            
+           
+            <a href="/about" class="hover:text-gray-300 text-black"><i class="fas fa-info-circle"></i> About</a>
+            <a href="/logout" class=" hover:text-gray-300 text-black">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="message-container">
+            {% for category, message in messages %}
+                <div class="message {{ category | lower }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+<div class="card-overlay" onclick="closeCard()"></div>
+<div class="card1" id="card2">
+    <div class="container-dynamic">
+        <div class="container mx-auto p-2">
+            
+            <form action="/insert/video/id" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h1 class="text-2xl font-bold mb-4">Insert YouTube Video</h1>
+            
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name" >
+                        Video Name
+                    </label>
+                    <input class="border rounded w-full py-2 px-3 text-gray-700 leading-tight  focus:border-yellow-300" id="name" name="name" type="text" placeholder="Video Name" autocomplete="off" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="id" >
+                        Video ID
+                    </label>
+                    <input class="border rounded w-full py-2 px-3 text-gray-700 leading-tight  focus:border-yellow-300" id="id" name="id" type="text" autocomplete="off" placeholder="Video ID" required>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold  rounded  focus:border-yellow-300" type="submit">
+                        <i class="fas fa-save mr-2"></i> Save
+                    </button>
+                    
+                    <b class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  focus:border-yellow-300" >
+                        <a href="/downloaded"class="text-white" >
+                            <i class="fas fa-play-circle text-white"></i>
+                        </a>
+                    </b>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container mx-auto p-2">
+    <div class="flex items-center justify-between">
+        <p style="color:green;">You dont know where to start?</p>
+         
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  focus:border-yellow-300" >
+         <a href="https://www.youtube.com/watch?v=_hwDGLrc8xE"class="text-white" >
+             <i class="fas fa-play-circle text-white"></i> Watch Video Demo
+         </a>
+         
+     </button>
+</div>
+
+</div>
+    <div class="container mx-auto p-4">
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-2xl font-bold">YouTube Video Search</h1>
+            
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="openCard('card2')">Add Video</button>
+        </div>
+        <div class="mb-4">
+            <label for="search-input">Search for a YouTube video:</label>
+            <input type="text" id="search-input" class="border rounded p-2 w-full">
+        </div>
+        <div id="video-container" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% for video in videos %}
+            <div id="{{ video.id }}" class="bg-white rounded shadow">
+              <iframe class="w-full" height="315" src="https://www.youtube.com/embed/{{ video.video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <h6 class="py-2 px-2 ps-2 pe-2">{{ video.name }}</h6>
+              <div class="border border-gray-300 rounded-lg relative">
+                <div class="flex items-center justify-between">
+                 
+                  <a class="px-3 py-2 text-gray-400 hover:text-gray-600 cursor-pointer expand-icon">
+                    <i class="fas fa-link"></i>
+                  </a>
+                  <a class="px-3 py-2 text-gray-400 hover:text-gray-600 cursor-pointer copy-icon">
+                    <i class="fas fa-copy"></i>
+                  </a>
+                  <p class="ml-2 copy-feedback">Link Copied</p>
+                  <div class="expandable-container ml-0">
+                    <p class="p-3 expandable-content text-info">https://www.youtube.com/watch?v={{ video.video_id }}</p>
+                  </div>
+                  <form action="/delete/video/{{ video.video_id }}" method="POST">
+                    
+                    
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i></button>
+                    
+                </form>
+                </div>
+              </div>
+              
+              
+              
+              
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </div>
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const videoContainer = document.getElementById('video-container');
+    
+        let debounceTimer;
+    
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const searchQuery = searchInput.value.toLowerCase();
+                fetch(`/?query=${searchQuery}`)
+                    .then(response => response.text())
+                    .then(videoData => {
+                        const parser = new DOMParser();
+                        const newHtml = parser.parseFromString(videoData, 'text/html');
+                        const newVideoContainer = newHtml.getElementById('video-container');
+                        // Replace the content of the existing video container
+                        videoContainer.innerHTML = newVideoContainer.innerHTML;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching video data:', error);
+                        videoContainer.innerHTML = '<p>Error fetching video data</p>';
+                    });
+            }, 300); // Adjust the debounce time as needed
+        });
+    </script>
+              
+    <script>
+        const components = document.querySelectorAll('.bg-white');
+    
+        class ExpandableComponent {
+            constructor(container) {
+                this.container = container;
+                this.contentElement = this.container.querySelector('.expandable-container');
+                this.expandIconElement = this.container.querySelector('.expand-icon');
+                this.copyIconElement = this.container.querySelector('.copy-icon');
+                this.copyFeedbackElement = this.container.querySelector('.copy-feedback');
+    
+                this.expandIconElement.addEventListener('click', this.toggleContent.bind(this));
+                this.copyIconElement.addEventListener('click', this.copyToClipboard.bind(this));
+            }
+    
+            toggleContent() {
+                this.contentElement.classList.toggle('ml-0');
+                this.contentElement.classList.toggle('content-visible');
+            }
+    
+            copyToClipboard() {
+                const sentence = this.contentElement.querySelector('.expandable-content').innerText;
+                const tempInput = document.createElement('textarea');
+                tempInput.value = sentence;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+    
+                this.contentElement.classList.add('content-visible');
+                this.copyFeedbackElement.style.display = 'block';
+    
+                setTimeout(() => {
+                    this.copyFeedbackElement.style.display = 'none';
+                }, 2000);
+            }
+        }
+    
+        videoContainer.addEventListener('click', event => {
+            const clickedExpandIcon = event.target.closest('.expand-icon');
+            const clickedCopyIcon = event.target.closest('.copy-icon');
+            
+            if (clickedExpandIcon) {
+                const expandableContainer = clickedExpandIcon.closest('.bg-white');
+                new ExpandableComponent(expandableContainer);
+            }
+            
+            if (clickedCopyIcon) {
+                const expandableContainer = clickedCopyIcon.closest('.bg-white');
+                new ExpandableComponent(expandableContainer);
+            }
+        });
+    
+        components.forEach(component => new ExpandableComponent(component));
+    </script>
+    
+    <script src="../static/ex/card.js"></script>
+    
+    
+</body>
+</html>

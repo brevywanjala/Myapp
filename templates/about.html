@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyYoutube</title>
+    <link rel="icon" href="{{ url_for('static', filename='youtube.ico') }}" type="image/x-icon">
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include Animate.css for animations -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for fixed footer */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        footer {
+            margin-top: auto;
+        }
+        /* Custom CSS for blueish gradient cards */
+        .blue-gradient {
+            background: linear-gradient(180deg, #60A5FA, #7F9CF5);
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000000, #000040, #7F9CF5, #ffffff);
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            70% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .card {
+            animation: cardAppear 1s ease-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+    
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar --> {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="message-container">
+      {% for category, message in messages %}
+          <div class="message {{ category | lower }}">
+              {{ message }}
+          </div>
+      {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
+
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-xl font-semibold">My youtube </a>
+            <img src="../static/youtube.ico" height="30px" width="30px" /> 
+            <div>
+                <a href="/" class="hover:text-gray-300"><i class="fas fa-home"></i> Home</a>
+                
+
+                <!-- Add more navigation links if needed -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-semibold mb-4">About Us</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white blue-gradient rounded shadow p-6  hover:animate-pulse card">
+                <h2 class="text-xl font-semibold mb-2 flex items-center justify-center"><i class="fas fa-bullseye fa-3x mb-4 text-blue-600"></i> <br>Our Mission</h2>
+                <p class="text-gray-700">
+                    At Your App Name, we're on a mission to empower users to curate their own video store experience. Whether it's personal videos or curated content, we're here to make content organization seamless and enjoyable.
+                </p>
+            </div>
+            <div class="bg-white blue-gradient rounded shadow p-6 hover:animate-pulse card">
+                <h2 class="text-xl font-semibold mb-2"><i class="fas fa-video fa-3x mb-4 text-blue-600"></i>Curate Your Store</h2>
+                <p class="text-gray-700">
+                    Create a personalized video store by linking your favorite YouTube videos using their video IDs. Organize your videos in playlists and categories, and enjoy easy access to your favorite content.
+                </p>
+            </div>
+            <div class="bg-white blue-gradient rounded shadow p-6 hover:animate-pulse card">
+                <h2 class="text-xl font-semibold mb-2"><i class="fas fa-lock fa-3x mb-4 text-blue-600"></i>Copyright Considerations</h2>
+                <p class="text-gray-700">
+                    Please be aware that some videos may have restricted access due to copyright settings. Additionally, some content creators may have restricted access to their videos. Always check YouTube permissions before linking or playing videos.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class=" p-4 bg-blue-500">
+        <div class="container mx-auto text-center">
+            &copy; 2023 MyYoutube @brevywanjala. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

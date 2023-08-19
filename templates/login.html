@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyYoutube</title>
+    <link rel="icon" href="{{ url_for('static', filename='youtube.ico') }}" type="image/x-icon">
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="../static/css/card.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-xl font-semibold">My Youtube</a>
+            <a href="#" class="text-white font-semibold"><img src="../static/youtube.ico" height="30px" width="30px" /></a>
+            
+            <a href="/about" class="text-white hover:text-gray-200"><i class="fas fa-info-circle"></i>About Us</a>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="message-container">
+            {% for category, message in messages %}
+                <div class="message {{ category | lower }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <div class="flex justify-center items-center h-screen">
+        <div class="bg-white p-8 rounded shadow-md w-96">
+            <h2 class="text-2xl font-semibold mb-4">Login</h2>
+            <form action="/login" method="POST">
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" class="mt-1 p-2 w-full border rounded focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 w-full border rounded focus:outline-none focus:shadow-outline" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline">Login</button>
+            </form>
+            <p class="mt-4 text-sm text-gray-600">Don't have an account? <a href="/signup" class="text-blue-500 hover:text-blue-600">Sign up</a></p>
+            <p class="mt-4 text-sm text-blue-600"  onclick="openCard('card4')">forgot password?  </p>
+        </div>
+    </div>
+    <div class="card-overlay" onclick="closeCard()"></div>
+<div class="card1" id="card4">
+    <div class="container-dynamic">
+        <div class="container mx-auto p-2">
+            
+            <form action="/recover_password" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h1 class="text-2xl font-bold mb-4">Insert YouTube Video</h1>
+            
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name" >
+                        Your Email
+                    </label>
+                    <input class="border rounded w-full py-2 px-3 text-gray-700 leading-tight  focus:border-yellow-300" id="email" name="email" type="text" placeholder="Enter your email" autocomplete="off" required>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white p-2 font-bold  rounded  focus:border-yellow-300" type="submit">
+                        <i class="fas fa-save mr-2"></i>Send Request
+                    </button>         
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <!-- Include Font Awesome icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Include Font Awesome icons -->
+    <script src="../static/js/card.js"></script>
+</body>
+</html>

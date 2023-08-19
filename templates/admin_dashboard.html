@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="icon" href="{{ url_for('static', filename='youtube.ico') }}" type="image/x-icon">
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="../static/css/card.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-b from-black to-blue-500 h-screen">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="message-container">
+            {% for category, message in messages %}
+                <div class="message {{ category | lower }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <nav class="fixed top-0 left-0 w-full bg-gray-900 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-lg font-bold">Admin Dashboard</a>
+            <ul class="flex space-x-4">
+                <li><a href="/" class="text-white">Home</a></li>
+                <li><a href="/about" class="text-white">About</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="items-center justify-center pt-20 flex" >
+        <div style="width:20%;height:20%" class="col-span-5 m-4 md:col-span-1 bg-gradient-to-br from-blue-300 to-blue-500 rounded-lg items-center overflow-hidden shadow-lg transform scale-0 animate-fade-in-up animate-bounce transition-transform duration-1000">
+            <div class="p-4">
+                <p class="text-lg font-semibold text-white">User Count: {{ user_count }}</p>
+            </div>
+            <form action="/delete_all" method="post" class="mt-4">
+                <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:shadow-outline">
+                    Delete All Videos
+                </button>
+            </form>
+            
+        </div><br>
+    </div>
+    
+    <div class="flex justify-center items-center pt-16">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            
+            {% for username in usernames %}
+            <div class="col-span-5 md:col-span-1 bg-gradient-to-br from-blue-300 to-blue-500 rounded-lg overflow-hidden shadow-lg transform scale-0 animate-fade-in-up animate-bounce transition-transform duration-1000">
+                <div class="p-4">
+                    <p class="text-lg font-semibold text-white">{{ username }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <footer class="fixed bottom-0 left-0 w-full bg-gray-900 text-center py-4">
+        <p class="text-white">&copy; 2023 MyYoutube @brevywanjala. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cards = document.querySelectorAll(".animate-fade-in-up");
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.transform = "scale(1)";
+                    card.classList.add("animate-bounce");
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MyYoutube</title>
+  <link rel="icon" href="{{ url_for('static', filename='youtube.ico') }}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="../static/css/card.css" rel="stylesheet">
+    <script src="../static/js/card.js"></script>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      <div class="message-container">
+          {% for category, message in messages %}
+              <div class="message {{ category | lower }}">
+                  {{ message }}
+              </div>
+          {% endfor %}
+      </div>
+  {% endif %}
+  {% endwith %}
+  
+  
+    <div class="p-3 m-4">
+        <h1 class="text-3xl font-bold mb-6">YouTube Video Downloader</h1>
+        
+        <form method="post" id="download-form" action="/downloaded" class="mb-4">
+            <label for="video_url" class="block font-semibold">Enter YouTube Video URL:</label>
+            <input type="text" name="video_url" id="video_url" required class="border rounded p-2 w-full" autocomplete="off">
+            <button type="submit" id="startButton" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:shadow-outline">Download</button>
+        </form>
+        
+        <div id="message" class="mb-4"></div>
+        <div id="progress-container" style="display: none;">
+            <p class="mb-2">Downloading...</p>
+            <progress id="progress-bar" max="100" value="0" class="w-full"></progress>
+        </div>
+        
+        <button id="startButton" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:shadow-outline">Start Process</button>
+    </div>
+
+    <script>
+        const messages = [
+          "Assembling features..",
+          "Compiling components...",
+          "Generating video....",
+          "Downloading....."
+        ];
+        const messageElement = document.getElementById("message");
+        const startButton = document.getElementById("startButton");
+        let messageIndex = 0;
+        let intervalId;
+        const delayBetweenMessages = 5 * 2000; // 2 seconds
+
+        function showMessage() {
+          if (messageIndex < messages.length) {
+            messageElement.textContent = messages[messageIndex];
+            messageIndex++;
+          } else {
+            messageIndex = 0;
+            messageElement.textContent = "All steps completed!";
+          }
+        }
+
+        startButton.addEventListener("click", function() {
+          if (!intervalId) {
+            showMessage(); // Show the first message immediately
+            intervalId = setInterval(showMessage, delayBetweenMessages);
+            startButton.textContent = "Stop Process";
+          } else {
+            clearInterval(intervalId);
+            intervalId = null;
+            startButton.textContent = "Start Process";
+            messageElement.textContent = "Process stopped";
+          }
+        });
+    </script>
+    
+    <script>
+        const form = document.getElementById("download-form");
+        const progressContainer = document.getElementById("progress-container");
+        const progressBar = document.getElementById("progress-bar");
+
+        form.addEventListener("submit", function (event) {
+            progressContainer.style.display = "block";
+
+            // Establish SSE connection
+            const source = new EventSource("/progress");
+            
+            source.onmessage = function(event) {
+                const progress = parseFloat(event.data);
+                if (progress >= 100) {
+                    source.close();
+                    progressContainer.style.display = "none";
+                } else {
+                    progressBar.value = progress;
+                }
+            };
+        });
+    </script>
+</body>
+</html>
