@@ -44,7 +44,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # Specify the database file path
-DATABASE ="Youtube.db"
+DATABASE ="youtube.db"
 # SQLite database setup
 def setup_database():
     connection = sqlite3.connect(DATABASE)  # Replace with your database file name
