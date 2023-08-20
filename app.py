@@ -13,14 +13,14 @@ from pytube import YouTube
 
 
 import webbrowser
-import win32gui, win32con
 
-import tkinter as tk
+
+
 import threading
 import webbrowser
 import os
 import sys
-import win32com.client
+
 
 app = Flask(__name__)
 
@@ -418,9 +418,7 @@ def insert_default_videos(cursor, connection, user_id):
     for name, video_id in default_videos:
         cursor.execute("INSERT INTO videos (name, video_id, user_id) VALUES (?, ?, ?)", (name, video_id, user_id))
         connection.commit()
-def hide_console():
-    hWnd = win32gui.GetForegroundWindow()
-    win32gui.ShowWindow(hWnd, win32con.SW_HIDE)
+
 
 if __name__ == '__main__':
      # Hide the console window
