@@ -285,7 +285,7 @@ def reset_password(token):
                 connection.close()
                 return redirect(url_for("reset_password", token=token))
             # Update the user's password in the password_backup table
-            hashed_password = generate_password_hash(new_password, method='scrypt')
+            hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
             cursor.execute("UPDATE users SET password = ? WHERE id = ?", (hashed_password, user_id))
             connection.commit()
 
@@ -324,7 +324,7 @@ def signup():
             return redirect("/signup")
 
         # Hash the password
-        hashed_password = generate_password_hash(password, method='scrypt')
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
         connection = sqlite3.connect(DATABASE)
         cursor = connection.cursor()
