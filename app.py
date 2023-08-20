@@ -425,7 +425,7 @@ def hide_console():
 if __name__ == '__main__':
      # Hide the console window
     setup_database()
-    app.run(debug=False,host=0.0.0.0)
+    app.run(debug=False)
     
     
     
